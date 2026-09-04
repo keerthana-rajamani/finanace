@@ -1,0 +1,53 @@
+.tax-page { max-width: 1200px; margin: 0 auto; padding: 32px 20px; }
+.loading { text-align: center; padding: 80px; color: #666; }
+
+.page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 28px; flex-wrap: wrap; gap: 12px; }
+.page-header h2 { color: #1a237e; margin: 0; }
+.tax-header-right { display: flex; align-items: center; gap: 10px; }
+
+.fy-select { padding: 8px 14px; border: 1.5px solid #ddd; border-radius: 8px; font-size: 0.9rem; cursor: pointer; font-family: inherit; }
+.btn-edit-tax { background: #e8eaf6; color: #1a237e; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size: 0.88rem; font-weight: 600; }
+.btn-save-tax { background: #43a047; color: #fff; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size: 0.88rem; font-weight: 600; }
+.btn-cancel-tax { background: #e0e0e0; color: #333; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size: 0.88rem; }
+
+.tax-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 20px; }
+
+.tax-card { background: #fff; border-radius: 12px; padding: 24px; box-shadow: 0 2px 12px rgba(0,0,0,0.07); }
+.tax-card h3 { color: #1a237e; margin: 0 0 18px; font-size: 1rem; }
+.tax-computation { border: 2px solid #e8eaf6; }
+
+.tax-rows { display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px; }
+.tax-row { display: flex; justify-content: space-between; align-items: center; font-size: 0.88rem; color: #555; padding: 6px 0; border-bottom: 1px solid #f5f5f5; }
+.tax-val { font-weight: 600; color: #333; }
+.tax-highlight { color: #1a237e; font-size: 1rem; }
+.tax-note { color: #aaa; font-size: 0.78rem; }
+.tax-balance-row { padding-top: 10px; border-top: 2px solid #e8eaf6; border-bottom: none; font-weight: 700; font-size: 0.95rem; }
+.tax-payable { color: #e53935; font-size: 1.1rem; }
+.tax-refund { color: #43a047; font-size: 1.1rem; }
+
+.tax-input { width: 130px; padding: 6px 10px; border: 1.5px solid #1a237e; border-radius: 6px; font-size: 0.88rem; text-align: right; font-family: inherit; }
+
+.tax-total { display: flex; justify-content: space-between; font-weight: 700; color: #1a237e; padding: 10px 0 0; border-top: 2px solid #e8eaf6; font-size: 0.9rem; }
+
+.slab-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+.slab-table th { background: #e8eaf6; color: #1a237e; padding: 8px 12px; text-align: left; }
+.slab-table td { padding: 8px 12px; border-bottom: 1px solid #f0f0f0; color: #555; }
+.slab-table tr:hover td { background: #fafafa; }
+.slab-note { font-size: 0.78rem; color: #888; margin-top: 10px; }
+
+.advance-tax-list { display: flex; flex-direction: column; gap: 10px; }
+.advance-tax-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: #f5f5f5; border-radius: 8px; }
+.advance-tax-info { display: flex; flex-direction: column; gap: 2px; }
+.advance-label { font-size: 0.88rem; font-weight: 600; color: #333; }
+.advance-date { font-size: 0.78rem; color: #888; }
+.advance-pct { font-size: 0.85rem; font-weight: 600; color: #1a237e; }
+
+.headroom-list { display: flex; flex-direction: column; gap: 16px; }
+.headroom-item { display: flex; flex-direction: column; gap: 6px; }
+.headroom-header { display: flex; justify-content: space-between; font-size: 0.85rem; }
+.headroom-header span:first-child { font-weight: 600; color: #333; }
+.headroom-remaining { color: #43a047; font-weight: 600; }
+.headroom-bar-bg { background: #e8eaf6; border-radius: 6px; height: 8px; overflow: hidden; }
+.headroom-bar-fill { height: 100%; border-radius: 6px; transition: width 0.4s; }
+.headroom-footer { display: flex; justify-content: space-between; font-size: 0.78rem; color: #888; }
+.headroom-note { font-size: 0.78rem; color: #888; margin-top: 12px; text-align: center; }

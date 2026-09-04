@@ -1,0 +1,62 @@
+.bills-page { max-width: 1100px; margin: 0 auto; padding: 32px 20px; }
+.loading { text-align: center; padding: 80px; color: #666; }
+
+.page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+.page-header h2 { color: #1a237e; margin: 0; }
+.btn-add { background: #1a237e; color: #fff; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-size: 0.9rem; }
+.btn-add:hover { background: #283593; }
+
+.bills-summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 24px; }
+.summary-card { background: #fff; border-radius: 12px; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.07); display: flex; align-items: center; gap: 14px; }
+.summary-icon { font-size: 1.8rem; }
+.summary-value { display: block; font-size: 1.4rem; font-weight: 700; color: #1a237e; }
+.summary-label { font-size: 0.78rem; color: #888; }
+
+.bill-form-card { background: #fff; border-radius: 12px; padding: 24px; margin-bottom: 24px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
+.bill-form-card h3 { color: #1a237e; margin: 0 0 20px; }
+.bill-form { display: flex; flex-direction: column; gap: 16px; }
+.form-row { display: flex; gap: 16px; flex-wrap: wrap; }
+.form-group { display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 160px; }
+.form-group label { font-size: 0.85rem; font-weight: 600; color: #333; }
+.form-group input, .form-group select { padding: 9px 12px; border: 1.5px solid #ddd; border-radius: 6px; font-size: 0.9rem; font-family: inherit; }
+.form-group input:focus, .form-group select:focus { border-color: #1a237e; outline: none; }
+.field-error { color: #e53935; font-size: 0.78rem; }
+.form-actions { display: flex; gap: 12px; }
+.btn-save { background: #43a047; color: #fff; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; }
+.btn-cancel { background: #e0e0e0; color: #333; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; }
+
+.bills-tabs { display: flex; gap: 8px; margin-bottom: 20px; }
+.tab-btn { background: #fff; border: 1.5px solid #e0e0e0; padding: 8px 18px; border-radius: 8px; cursor: pointer; font-size: 0.88rem; color: #555; font-family: inherit; display: flex; align-items: center; gap: 6px; }
+.tab-btn:hover { border-color: #1a237e; color: #1a237e; }
+.tab-active { background: #1a237e; color: #fff; border-color: #1a237e; font-weight: 600; }
+.tab-active:hover { color: #fff; }
+.tab-badge { background: #e53935; color: #fff; border-radius: 10px; padding: 1px 7px; font-size: 0.75rem; }
+
+.empty-state { text-align: center; padding: 60px; color: #999; background: #fff; border-radius: 12px; }
+
+.bills-list { display: flex; flex-direction: column; gap: 12px; }
+.bill-card { background: #fff; border-radius: 12px; padding: 18px 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.06); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; border-left: 4px solid transparent; }
+.bill-urgent { border-left-color: #e53935; }
+
+.bill-left { display: flex; align-items: center; gap: 14px; }
+.bill-icon { font-size: 1.8rem; }
+.bill-info { display: flex; flex-direction: column; gap: 2px; }
+.bill-name { font-weight: 700; color: #1a237e; font-size: 0.95rem; }
+.bill-meta { font-size: 0.78rem; color: #888; }
+.bill-due { font-size: 0.78rem; color: #555; }
+
+.bill-right { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.bill-amount { font-size: 1.1rem; font-weight: 700; color: #333; }
+
+.badge { padding: 3px 10px; border-radius: 10px; font-size: 0.75rem; font-weight: 600; }
+.badge-paid { background: #e8f5e9; color: #2e7d32; }
+.badge-overdue { background: #ffebee; color: #c62828; }
+.badge-urgent { background: #fff3e0; color: #e65100; }
+.badge-soon { background: #fff8e1; color: #f57f17; }
+.badge-pending { background: #e8eaf6; color: #3949ab; }
+
+.bill-actions { display: flex; gap: 6px; }
+.btn-pay { background: #43a047; color: #fff; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; }
+.btn-pay:hover { background: #388e3c; }
+.btn-edit-sm { background: #e8eaf6; color: #1a237e; border: none; padding: 6px 10px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; }
+.btn-del-sm { background: #ffebee; color: #c62828; border: none; padding: 6px 10px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; }
