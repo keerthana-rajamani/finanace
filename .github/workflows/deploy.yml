@@ -1,0 +1,46 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: maven
+
+    - name: Set up Node.js 18
+      uses: actions/setup-node@v4
+      with:
+        node-version: 18
+        cache: 'npm'
+        cache-dependency-path: reactapp/package-lock.json
+
+    - name: Build and Test Frontend
+      working-directory: reactapp
+      run: |
+        npm ci
+        CI=true npm test -- --watchAll=false
+        npm run build
+
+    - name: Build and Test Backend
+      working-directory: springapp
+      run: |
+        mvn clean test
+
+    - name: Package Backend Jar
+      working-directory: springapp
+      run: |
+        mvn package -DskipTests
