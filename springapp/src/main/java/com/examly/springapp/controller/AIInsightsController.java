@@ -56,4 +56,16 @@ public class AIInsightsController {
         String answer = geminiService.askQuestion(userId, question);
         return ResponseEntity.ok(Map.of("answer", answer));
     }
+
+    @GetMapping("/status")
+    public ResponseEntity<Map<String, Object>> getStatus() {
+        return ResponseEntity.ok(geminiService.getStatus());
+    }
+
+    @PostMapping("/key")
+    public ResponseEntity<Map<String, Object>> setApiKey(@RequestBody Map<String, String> request) {
+        String key = request.get("apiKey");
+        geminiService.setCustomApiKey(key);
+        return ResponseEntity.ok(geminiService.getStatus());
+    }
 }

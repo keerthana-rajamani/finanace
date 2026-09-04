@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import api from '../api/api';
 import './AIInsights.css';
 
@@ -16,6 +16,40 @@ export default function AIInsights() {
   const [question, setQuestion] = useState('');
   const [chatHistory, setChatHistory] = useState([]);
   const [chatLoading, setChatLoading] = useState(false);
+  const [status, setStatus] = useState({ isGeminiLive: false, engine: 'Smart Financial Intelligence Engine' });
+  const [showKeyModal, setShowKeyModal] = useState(false);
+  const [keyInput, setKeyInput] = useState('');
+  const [keyMessage, setKeyMessage] = useState('');
+
+  useEffect(() => {
+    fetchStatus();
+  }, []);
+
+  const fetchStatus = async () => {
+    try {
+      const res = await api.get('/ai/status');
+      if (res.data) setStatus(res.data);
+    } catch {
+      // Keep default local engine status
+    }
+  };
+
+  const handleSaveKey = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await api.post('/ai/key', { apiKey: keyInput });
+      if (res.data) {
+        setStatus(res.data);
+        setKeyMessage(res.data.isGeminiLive ? 'Connected to Google Gemini 2.0 successfully!' : 'Switched to Smart Financial Intelligence Engine.');
+        setTimeout(() => {
+          setShowKeyModal(false);
+          setKeyMessage('');
+        }, 1200);
+      }
+    } catch {
+      setKeyMessage('Failed to update API key.');
+    }
+  };
 
   const fetchInsight = async (tab) => {
     if (results[tab.key]) return;
@@ -24,7 +58,7 @@ export default function AIInsights() {
       const res = await api.get(tab.endpoint);
       setResults(prev => ({ ...prev, [tab.key]: res.data[tab.field] }));
     } catch (err) {
-      setResults(prev => ({ ...prev, [tab.key]: 'Failed to load insights. Please check your API key and try again.' }));
+      setResults(prev => ({ ...prev, [tab.key]: 'Unable to load insights at this moment. Please try again.' }));
     } finally {
       setLoading(prev => ({ ...prev, [tab.key]: false }));
     }
@@ -60,25 +94,83 @@ export default function AIInsights() {
   const formatText = (text) => {
     if (!text) return null;
     return text.split('\n').map((line, i) => {
-      if (!line.trim()) return <br key={i} />;
-      if (/^\d+\./.test(line.trim())) {
+      const trimmed = line.trim();
+      if (!trimmed) return <br key={i} />;
+      if (/^\d+\./.test(trimmed)) {
         return <p key={i} className="insight-point">{line}</p>;
       }
-      if (line.startsWith('===') || line.startsWith('**')) {
+      if (trimmed.startsWith('===') || (trimmed.startsWith('**') && trimmed.endsWith('**'))) {
         return <p key={i} className="insight-heading">{line.replace(/\*\*/g, '').replace(/===/g, '').trim()}</p>;
+      }
+      if (trimmed.startsWith('•') || trimmed.startsWith('-')) {
+        return <p key={i} className="insight-bullet">{line}</p>;
       }
       return <p key={i} className="insight-line">{line}</p>;
     });
   };
 
   const activeTabObj = TABS.find(t => t.key === activeTab);
+  const botName = status?.isGeminiLive ? '🤖 Gemini 2.0' : '🤖 AI Advisor';
 
   return (
     <div className="ai-page">
       <div className="ai-header">
-        <h2>🤖 AI Financial Advisor</h2>
-        <p>Powered by Google Gemini — personalised insights based on your actual financial data</p>
+        <div className="ai-header-main">
+          <div>
+            <h2>🤖 AI Financial Advisor</h2>
+            <p>Personalised financial intelligence and spending insights based on your actual account data</p>
+          </div>
+          <div className="ai-badge-group">
+            <span className={`ai-engine-badge ${status?.isGeminiLive ? 'badge-live' : 'badge-local'}`}>
+              <span className="badge-dot"></span>
+              {status?.engine || 'Smart Financial Intelligence Engine'}
+            </span>
+            <button className="btn-key-config" onClick={() => setShowKeyModal(true)} title="Configure Gemini API Key">
+              ⚙️ Key
+            </button>
+          </div>
+        </div>
       </div>
+
+      {showKeyModal && (
+        <div className="modal-backdrop" onClick={() => setShowKeyModal(false)}>
+          <div className="key-modal-card" onClick={e => e.stopPropagation()}>
+            <h3>⚙️ Configure Google Gemini API Key</h3>
+            <p className="modal-subtitle">
+              The application operates seamlessly with the built-in <strong>Smart Financial Intelligence Engine</strong>.
+              If you have your own personal Google Gemini API Key, you can optionally connect it here.
+            </p>
+            <form onSubmit={handleSaveKey}>
+              <input
+                type="password"
+                className="key-input"
+                placeholder="Paste Gemini API key (starts with AIzaSy...)"
+                value={keyInput}
+                onChange={e => setKeyInput(e.target.value)}
+              />
+              {keyMessage && <p className="key-feedback">{keyMessage}</p>}
+              <div className="modal-actions">
+                <button type="submit" className="btn-save-key">
+                  Save & Connect
+                </button>
+                <button
+                  type="button"
+                  className="btn-default-key"
+                  onClick={() => {
+                    setKeyInput('');
+                    handleSaveKey({ preventDefault: () => {} });
+                  }}
+                >
+                  Use Smart Engine
+                </button>
+                <button type="button" className="btn-cancel-modal" onClick={() => setShowKeyModal(false)}>
+                  Close
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
 
       <div className="ai-layout">
         {/* Left: Tabs */}
@@ -110,7 +202,7 @@ export default function AIInsights() {
             {loading[activeTab] ? (
               <div className="ai-loading">
                 <div className="ai-spinner"></div>
-                <p>Gemini is analysing your financial data...</p>
+                <p>Analysing your financial records...</p>
               </div>
             ) : results[activeTab] ? (
               <div className="ai-result">
@@ -118,7 +210,7 @@ export default function AIInsights() {
               </div>
             ) : (
               <div className="ai-empty">
-                <p>Click the tab to load AI-powered insights for this section.</p>
+                <p>Click below or select a tab to load real-time financial insights.</p>
                 <button
                   className="btn-generate"
                   onClick={() => fetchInsight(activeTabObj)}
@@ -134,7 +226,7 @@ export default function AIInsights() {
         <div className="ai-chat-panel">
           <div className="ai-chat-header">
             <h3>💬 Ask Your AI Advisor</h3>
-            <p>Ask anything about your finances</p>
+            <p>Ask anything about your transactions, budgets, goals, and savings</p>
           </div>
 
           <div className="ai-chat-messages">
@@ -155,13 +247,13 @@ export default function AIInsights() {
             )}
             {chatHistory.map((msg, i) => (
               <div key={i} className={`chat-msg ${msg.role === 'user' ? 'chat-user' : 'chat-ai'}`}>
-                <span className="chat-role">{msg.role === 'user' ? '👤 You' : '🤖 Gemini'}</span>
+                <span className="chat-role">{msg.role === 'user' ? '👤 You' : botName}</span>
                 <div className="chat-text">{formatText(msg.text)}</div>
               </div>
             ))}
             {chatLoading && (
               <div className="chat-msg chat-ai">
-                <span className="chat-role">🤖 Gemini</span>
+                <span className="chat-role">{botName}</span>
                 <div className="chat-typing">
                   <span></span><span></span><span></span>
                 </div>
@@ -186,3 +278,4 @@ export default function AIInsights() {
     </div>
   );
 }
+

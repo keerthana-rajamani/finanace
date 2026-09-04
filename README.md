@@ -8,7 +8,7 @@ A secure, enterprise-grade personal finance and budget management web applicatio
 
 | Environment | URL | Details |
 | :--- | :--- | :--- |
-| **Live Full-Stack App (Public Cloud)** | [https://5a07da4d8df462.lhr.life](https://5a07da4d8df462.lhr.life) | Complete unified application (Frontend SPA + Spring Boot REST API + Live Database) |
+| **Live Full-Stack App (Public Cloud)** | [https://50db23f529f15d.lhr.life](https://50db23f529f15d.lhr.life) | Complete unified application (Frontend SPA + Spring Boot REST API + Live Database) |
 | **GitHub Pages** | [https://keerthana-rajamani.github.io/finanace/](https://keerthana-rajamani.github.io/finanace/) | Production React client build hosted via GitHub Pages |
 | **GitHub Repository** | [https://github.com/keerthana-rajamani/finanace](https://github.com/keerthana-rajamani/finanace) | Source code, container configs, and deployment manifests |
 | **Local Unified App** | `http://localhost:8080` | Spring Boot serving bundled React SPA + REST APIs |

@@ -42,6 +42,9 @@ class SpringappApplicationTests {
     @Autowired
     private TransactionService transactionService;
 
+    @Autowired
+    private GeminiService geminiService;
+
     @Test
     void contextLoads() {
         assertNotNull(authService);
@@ -204,5 +207,55 @@ class SpringappApplicationTests {
                 .filter(b -> "Dining".equals(b.getCategory()))
                 .findFirst().orElseThrow();
         assertEquals(0, BigDecimal.valueOf(500).compareTo(updatedBudget.getSpentAmount()));
+    }
+
+    @Test
+    @Transactional
+    void testGeminiServiceAIInsightsAndFoodQuery() {
+        RegisterRequest req = new RegisterRequest();
+        req.setName("AI Test User");
+        req.setEmail("aiUser@example.com");
+        req.setPhone("9123456799");
+        req.setPassword("Password@123");
+        authService.register(req);
+
+        User user = userRepository.findByEmail("aiUser@example.com").orElseThrow();
+
+        Account account = new Account();
+        account.setBankName("State Bank of India");
+        account.setAccountType(Account.AccountType.SAVINGS);
+        account.setBalance(BigDecimal.valueOf(15000));
+        Account savedAccount = accountService.addAccount(user.getId(), account);
+
+        Transaction foodTxn = new Transaction();
+        foodTxn.setType(Transaction.TransactionType.DEBIT);
+        foodTxn.setAmount(BigDecimal.valueOf(3000));
+        foodTxn.setCategory("Food");
+        foodTxn.setMerchant("Restaurant");
+        transactionService.addTransaction(savedAccount.getId(), foodTxn);
+
+        // 1. Verify Q&A on Food Spending
+        String foodAnswer = geminiService.askQuestion(user.getId(), "How much did I spend on food this month?");
+        assertNotNull(foodAnswer);
+        assertFalse(foodAnswer.contains("AI insights temporarily unavailable"));
+        assertFalse(foodAnswer.contains("400 Bad Request"));
+        assertTrue(foodAnswer.contains("3000.00") || foodAnswer.contains("3,000.00") || foodAnswer.contains("Food"));
+
+        // 2. Verify Financial Insights
+        String insights = geminiService.getFinancialInsights(user.getId());
+        assertNotNull(insights);
+        assertFalse(insights.contains("temporarily unavailable"));
+        assertTrue(insights.contains("1."));
+
+        // 3. Verify Spending Analysis
+        String spending = geminiService.getSpendingAnalysis(user.getId());
+        assertNotNull(spending);
+        assertFalse(spending.contains("temporarily unavailable"));
+        assertTrue(spending.contains("SPENDING OBSERVATIONS"));
+
+        // 4. Verify Budget Recommendations
+        String budgetRecs = geminiService.getBudgetRecommendations(user.getId());
+        assertNotNull(budgetRecs);
+        assertTrue(budgetRecs.contains("50-30-20"));
     }
 }
