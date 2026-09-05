@@ -1,0 +1,37 @@
+﻿apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: personal-finance-app
+  annotations:
+    run.googleapis.com/ingress: all
+spec:
+  template:
+    metadata:
+      annotations:
+        autoscaling.knative.dev/maxScale: "5"
+        autoscaling.knative.dev/minScale: "0"
+        run.googleapis.com/client.name: "gcloud"
+        run.googleapis.com/cpu-throttling: "true"
+    spec:
+      containerConcurrency: 80
+      timeoutSeconds: 300
+      containers:
+      - image: gcr.io/PROJECT_ID/personal-finance-app:latest
+        ports:
+        - name: http1
+          containerPort: 8080
+        resources:
+          limits:
+            cpu: "1000m"
+            memory: "1024Mi"
+        env:
+        - name: PORT
+          value: "8080"
+        - name: SPRING_DATASOURCE_URL
+          value: "jdbc:mysql:///financedb?cloudSqlInstance=PROJECT_ID:REGION:INSTANCE_NAME&socketFactory=com.google.cloud.sql.mysql.SocketFactory&useSSL=false"
+        - name: SPRING_DATASOURCE_USERNAME
+          value: "root"
+        - name: SPRING_DATASOURCE_PASSWORD
+          value: "Password@123"
+        - name: JWT_SECRET
+          value: "finance_secret_key_256bit_minimum_length_required_here"
